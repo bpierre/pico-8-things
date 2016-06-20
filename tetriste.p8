@@ -1,27 +1,6 @@
 pico-8 cartridge // http://www.pico-8.com
 version 7
 __lua__
-bl_types = {
- {map={0,0},  size=2},
- {map={3,0},  size=3},
- {map={7,0},  size=3},
- {map={11,0}, size=3},
- {map={15,0}, size=3},
- {map={19,0}, size=3},
- {map={23,0}, size=4},
-}
-
-function mk_block(type_i)
- local bl_type = bl_types[type_i]
- local half = flr(128/8/2)
- local block = {
-  type_i = type_i,
-  x = half - flr(bl_type.size/2),
-  y = half - flr(bl_type.size/2),
-  r = 1,
- }
- return block
-end
 
 -- loop a value from f to t
 -- d is direction (1, -1)
@@ -33,6 +12,17 @@ function loop_int(v, f, t, d)
   return t
  end
  return v + d
+end
+
+function mk_block(type_i, x, y)
+ local bl_type = bl_types[type_i]
+ local block = {
+  type_i = type_i,
+  x = x,
+  y = y,
+  r = 1,
+ }
+ return block
 end
 
 function move_block(x, y, r)
@@ -98,13 +88,25 @@ function draw_lines(x, y, shake)
  --draw_block(x,y,7,8,0,2,shake)
 end
 
-gridw = 8*10
-gridh = 8*20
-gridmargin = (128-gridw)/2
-shake=0
+bl_types = {
+ {map={0,0},  size=2},
+ {map={3,0},  size=3},
+ {map={7,0},  size=3},
+ {map={11,0}, size=3},
+ {map={15,0}, size=3},
+ {map={19,0}, size=3},
+ {map={23,0}, size=4},
+}
+
+gridw = 8 * 10
+gridh = 8 * 20
+gridmargin = (128 - gridw) / 2
+shake = 0
 
 cur_block = mk_block(
- flr(rnd(#bl_types))+1
+ flr(rnd(#bl_types))+1,
+ gridmargin + flr(gridw/2),
+ flr(gridh/2)
 )
 
 function _update()
@@ -113,12 +115,12 @@ function _update()
  elseif shake != 0 then
   shake = 0
  end
- if btnp(0) then move_block(-1,0,0) end
- if btnp(1) then move_block(1,0,0) end
- if btnp(2) then move_block(0,-1,0) end
- if btnp(3) then move_block(0,1,0) end
- if btnp(4) then
-  move_block(0,0,1) end
+ if btnp(0) then cur_block.r = 3 end
+ if btnp(1) then cur_block.r = 1 end
+ if btnp(2) then cur_block.r = 4 end
+ if btnp(3) then cur_block.r = 2 end
+ if btnp(4) then move_block(0,0,1) end
+
   --cur_block = mk_block(
   -- loop_int(
   --  cur_block.type_i, 1, 7, 1))
@@ -140,7 +142,8 @@ function _draw()
  local eas_shake=eas(shake)
  rectfill(
   0, 80,
-  127*(1-shake), 81, 1)
+  127*(1-shake), 81, 1
+ )
  rectfill(
   0, 83,
   127*(1-eas_shake), 84, 1)
