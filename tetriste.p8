@@ -2,6 +2,8 @@ pico-8 cartridge // http://www.pico-8.com
 version 7
 __lua__
 
+-- vim: set filetype=lua:
+
 -- loop a value from f to t
 -- d is direction (1, -1)
 function loop_int(v, f, t, d)
