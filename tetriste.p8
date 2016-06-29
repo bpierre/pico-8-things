@@ -46,68 +46,74 @@ function easeinquint(t)
  return t*t*t*t*t
 end
 
-function draw_block(
- gridx, gridy,
- type_i, x, y, r,
- shake
-)
-  local t = bl_types[type_i]
-  palt(0, false)
-  local shakex=0
-  local shakey=0
-  --local sha=(shake*shake*shake*shake*shake)*10
-  local s=shake*5
+function block_type(block)
+  return bl_types[block.type_i]
+end
+
+function draw_block(grid, block, shake)
+  local bltype = block_type(block)
+  local shakex = 0
+  local shakey = 0
+  local s = shake * 5
+
   if shake > 0 then
-   shakex=rnd(s)-s/2
-   shakey=rnd(s)-s/2
+   shakex = rnd(s) - s/2
+   shakey = rnd(s) - s/2
   end
 
+  palt(0, false)
   map(
-   t.map[1],
-   t.map[2] + t.size * (r-1),
-   x*8 + gridx + shakex,
-   y*8 + gridy + shakey,
-   t.size,
-   t.size)
-  --spr(t.spr, (r_sx), (r_sy))
+    bltype.map[1],
+    bltype.map[2] + (
+      bltype.size * (block.r - 1)
+    ),
+    grid.x + block.x * 8 + shakex,
+    grid.y + block.y * 8 + shakey,
+    bltype.size,
+    bltype.size)
   palt()
 end
 
-function draw_lines(x, y, shake)
- draw_block(x,y,1,0,0,1,shake)
- draw_block(x,y,5,0,2,1,shake)
- draw_block(x,y,2,1,1,1,shake)
- draw_block(x,y,3,2,0,1,shake)
- draw_block(x,y,7,3,2,1,shake)
- draw_block(x,y,6,4,1,1,shake)
- draw_block(x,y,2,4,-1,3,shake)
- draw_block(x,y,4,6,0,2,shake)
- --draw_block(3,10,1,4,shake)
- draw_block(x,y,6,8,0,4,shake)
- draw_block(x,y,5,7,2,1,shake)
- --draw_block(x,y,7,8,0,2,shake)
+-- function draw_lines(gx, gy, shake)
+--  draw_block(gx,gy, 1, 0,0,1, shake)
+--  draw_block(gx,gy, 5, 0,2,1, shake)
+--  draw_block(gx,gy, 2, 1,1,1, shake)
+--  draw_block(gx,gy, 3, 2,0,1, shake)
+--  draw_block(gx,gy, 7, 3,2,1, shake)
+--  draw_block(gx,gy, 6, 4,1,1, shake)
+--  draw_block(gx,gy, 2, 4,-1,3,shake)
+--  draw_block(gx,gy, 4, 6,0,2, shake)
+--  draw_block(gx,gy, 6, 8,0,4, shake)
+--  draw_block(gx,gy, 5, 7,2,1, shake)
+--  draw_block(gx,gy, 7,8,0,2,shake)
+-- end
+
+function _init()
+
+  bl_types = {
+    { map={0,0},  size=2 },
+    { map={3,0},  size=3 },
+    { map={11,0}, size=3 },
+    { map={15,0}, size=3 },
+    { map={19,0}, size=3 },
+    { map={23,0}, size=4 },
+  }
+
+  grid = {}
+  grid.w = 8 * 10
+  grid.h = 8 * 20
+  grid.x = (128 - grid.w) / 2
+  grid.y = 0
+
+  shake = 0
+
+  local bltype_i = flr(rnd(#bl_types))+1
+  cur_block = mk_block(
+    bltype_i,
+    flr(grid.w/2/8) - bl_types[bltype_i].size / 2,
+    flr(grid.h/2/8) - bl_types[bltype_i].size
+  )
 end
-
-bl_types = {
- {map={0,0},  size=2},
- {map={3,0},  size=3},
- {map={7,0},  size=3},
- {map={11,0}, size=3},
- {map={15,0}, size=3},
- {map={19,0}, size=3},
- {map={23,0}, size=4},
-}
-
-gridw = 8 * 10
-gridh = 8 * 20
-gridmargin = (128 - gridw) / 2
-shake = 0
-
-cur_block = mk_block(
- flr(rnd(#bl_types))+1,
- gridmargin + flr(gridw/2),
- flr(gridh/2)
-)
 
 function _update()
  if shake > 0 then
@@ -115,10 +121,10 @@ function _update()
  elseif shake != 0 then
   shake = 0
  end
- if btnp(0) then cur_block.r = 3 end
- if btnp(1) then cur_block.r = 1 end
- if btnp(2) then cur_block.r = 4 end
- if btnp(3) then cur_block.r = 2 end
+ if btnp(0) then cur_block.r = 4 end
+ if btnp(1) then cur_block.r = 2 end
+ if btnp(2) then cur_block.r = 1 end
+ if btnp(3) then cur_block.r = 3 end
  if btnp(4) then move_block(0,0,1) end
 
   --cur_block = mk_block(
@@ -130,42 +136,29 @@ end
 function _draw()
  cls()
  rectfill(0,0,127,127,0)
- rectfill(
-  gridmargin,0,
-  gridmargin + gridw,gridh,
-  5)
- 
- local function eas(t)
-  --t -= 1
-  return t*t
- end
- local eas_shake=eas(shake)
- rectfill(
-  0, 80,
-  127*(1-shake), 81, 1
- )
- rectfill(
-  0, 83,
-  127*(1-eas_shake), 84, 1)
+ rectfill(grid.x, 0, grid.x + grid.w, grid.h, 5)
 
- draw_lines(
-  gridmargin, 0, shake
- )
- draw_block(
-  gridmargin, 0,
-  cur_block.type_i,
-  cur_block.x,
-  cur_block.y,
-  cur_block.r,
-  0)
+ --local function eas(t)
+ -- --t -= 1
+ -- return t*t
+ --end
+ --local eas_shake=eas(shake)
+ --rectfill(
+ -- 0, 80,
+ -- 127*(1-shake), 81, 1
+ --)
+ --rectfill(0, 83, 127*(1-eas_shake), 84, 1)
+
+ -- draw_lines(grid.x, 0, shake)
+ draw_block(grid, cur_block, 0)
  
  local i = mk_info()
- i('s '..shake)
- i('es '..eas_shake)
- --i("type "..cur_block.type_i)
- --i("r "..cur_block.r)
- --i("x "..cur_block.x)
- --i("y "..cur_block.y)
+  i('s '..shake)
+  -- i('es '..eas_shake)
+  i("type "..cur_block.type_i)
+  i("x "..cur_block.x)
+  i("y "..cur_block.y)
+  i("r "..cur_block.r)
 end
 
 __gfx__
