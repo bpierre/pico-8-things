@@ -1,13 +1,15 @@
 pico-8 cartridge // http://www.pico-8.com
 version 8
 __lua__
+-- flappytweet
+-- by @bpierre
 -- vim: set filetype=lua:
-y=0 w=128 t=w
-while t>1 do cls()t+=1
+y=1 w=128 t=0
+while y>0 do cls()t+=1
 srand(flr(t/w))x=w-t%w
-y+=1 if(btn(2))y-=2
+y+=1 if(btn(2))y-=3
 pset(9,y)i=rnd(w)line(x,i,x,w)
-if(x==9 and y>i)t=0
+if(x==9 and y>i)y=0
 flip()end
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
