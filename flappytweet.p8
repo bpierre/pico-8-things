@@ -1,6 +1,7 @@
 pico-8 cartridge // http://www.pico-8.com
 version 8
 __lua__
+-- vim: set filetype=lua:
 y=0 w=128 t=w
 while t>1 do cls()t+=1
 srand(flr(t/w))x=w-t%w
