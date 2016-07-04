@@ -2,13 +2,13 @@
 
 Things developed for the [PICO-8](http://www.lexaloffle.com/pico-8.php) fantasy console.
 
-## Complete
+![FLAPPYTWEET cartridge](flappytweet.p8.png)
 
-- [FLAPPYTWEET](flappytweet.p8) ([tweet](https://twitter.com/bpierre/status/749607272104493056), [BBS post](http://www.lexaloffle.com/bbs/?pid=24416#p24416))
+[🐤 FLAPPYTWEET](flappytweet.p8) ([Twitter](https://twitter.com/bpierre/status/749607272104493056), [PICO-8 BBS](http://www.lexaloffle.com/bbs/?pid=24416#p24416))
 
-## Incomplete
+![TETRISTE cartridge](tetriste.p8.png)
 
-- [TETRISTE](tetriste.p8)
+[🔲 TETRISTE](tetriste.p8) (incomplete)
 
 ## LICENSE
 
