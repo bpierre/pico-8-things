@@ -8,7 +8,7 @@ Things developed for the [PICO-8](http://www.lexaloffle.com/pico-8.php) fantasy 
 
 ![TETRISTE cartridge](tetriste.p8.png)
 
-[🔲 TETRISTE](tetriste.p8) (incomplete)
+[🔷 TETRISTE](tetriste.p8) (incomplete)
 
 ![WireWorld cartridge](wireworld.p8.png)
 
