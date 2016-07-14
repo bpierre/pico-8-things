@@ -10,6 +10,10 @@ Things developed for the [PICO-8](http://www.lexaloffle.com/pico-8.php) fantasy 
 
 [🔲 TETRISTE](tetriste.p8) (incomplete)
 
+![WireWorld cartridge](wireworld.p8.png)
+
+[🔌 WireWorld](wireworld.p8)
+
 ## LICENSE
 
 [MIT](https://pierre.mit-license.org/)
