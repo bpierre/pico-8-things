@@ -11,7 +11,7 @@ cursor_y = grid_width/2
 cursor_mode = 3
 grid = {}
 game_paused=false
-tick_time=0.2*60
+tick_time=0.2*30
 tick=tick_time
 
 type_empt=0
@@ -76,7 +76,7 @@ function move_cursor(x, y)
  if newx < grid_width and newx >= 0 then
   cursor_x = newx
  end
- if newy < grid_width and newy >= 0 then
+ if newy < grid_width and newy >= 2 then
   cursor_y = newy
  end
 end
@@ -119,7 +119,7 @@ function game_tick()
  end
 end
 
-function _update60()
+function _update()
  if (not game_paused) game_tick()
  if (btnp(0)) move_cursor(-1,0)
  if (btnp(1)) move_cursor(1,0)
@@ -134,7 +134,6 @@ function _update60()
   else
    cursor_mode = 0
   end
-  --grid[cursor_y+1][cursor_x+1] = 2
  end
  if btnp(6) then
   game_paused = not game_paused
