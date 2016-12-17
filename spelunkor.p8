@@ -369,11 +369,16 @@ function draw_player()
  )
  palt()
 
+ local hat_yshift = 0
+ if player.falling then
+   hat_yshift = -player.vy * 1.1
+ end
+
  -- hat
  spr(
   3,
   player.x,
-  player.y - player.vy * 1.1,
+  player.y + hat_yshift,
   1, 1,
   player.dirx > 0
  )
