@@ -24,11 +24,21 @@ function _init()
  can_jump = true
 
  platforms = {
-  platform(10, 128-8, 8*4, 8, 1, 3),
-  platform(50, 128-8*2-2, 8*4, 8, 1, 1),
-  platform(80, 128-8*3-2*2, 8*4, 8, 1, 0.5),
+  -- platform(10, 128-8, 8*4, 8, 1, 3),
+  -- platform(50, 128-8*2-2, 8*4, 8, 1, 1),
+  -- platform(80, 128-8*3-2*2, 8*4, 8, 1, 0.5),
   -- platform(10, 128-8-2, 8*4, 8, 1, 1.5),
  }
+
+ local platform_size = 0
+ for i=1,12 do
+   platform_size = 8 * (flr(rnd(4)) + 1)
+   add(platforms, platform(
+     flr(rnd(128 - platform_size)),
+     128 - 8 * i - 2 * (i - 1),
+     platform_size, 8, 1, (rnd(3)+1)/2
+   ))
+ end
 
  has_platforms_stopped = true
 
@@ -219,6 +229,13 @@ function update_platforms(player_moved, slowing_down_timer)
    platform.x < 0
   ) then
    platform.dir *= -1
+  end
+
+  if platform.x + platform.w > 128 then
+    platform.x = 128 - platform.w
+  end
+  if platform.x < 0 then
+    platform.x = 0
   end
 
   player_collision(player, platform)
